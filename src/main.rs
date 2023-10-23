@@ -19,7 +19,7 @@ link-dynamic = content before link{$url}content after link"#);
 
     // Starting with a sentence with a url passed in. 
     let mut just_url_dynamic_arg = FluentArgs::new();
-    just_url_dynamic_arg.set("url", FluentValue::from("http://www.google.com"));
+    just_url_dynamic_arg.set("url", FluentValue::from("https://projectfluent.org/"));
     
     let msg = bundle.get_message("just-url-dynamic")
         .expect("Message doesn't exist.");
@@ -29,7 +29,7 @@ link-dynamic = content before link{$url}content after link"#);
 
     // Then instead of passing in the url, pass in the entire html link.
     let mut link_dynamic_arg = FluentArgs::new();
-    link_dynamic_arg.set("url", FluentValue::from(r#"<a href=http://www.google.com>this is a url</a>"#));
+    link_dynamic_arg.set("url", FluentValue::from(r#"<a href="https://projectfluent.org/">this is a url</a>"#));
 
     let msg = bundle.get_message("link-dynamic")
     .expect("Message doesn't exist.");
@@ -38,11 +38,13 @@ link-dynamic = content before link{$url}content after link"#);
     let link_dynamic_value = bundle.format_pattern(&pattern, Some(&link_dynamic_arg), &mut errors);
     
     // both indeed look the same.
+    println!("Compare these too, they are the same right?");
     println!("{link_dynamic_value}\n{just_url_dynamic_value}");
     println!("But are they? See for yourself: {}", link_dynamic_value == just_url_dynamic_value);
+    println!("Just try to open both urls in your browser.");
 
     // They aren't the same. What does it actually look like?
-    println!("{:?}\n{:?}", link_dynamic_value.as_bytes(), just_url_dynamic_value.as_bytes());
+    println!("\n\nByte arrays:\n{:?}\n{:?}\n\n", link_dynamic_value.as_bytes(), just_url_dynamic_value.as_bytes());
 
     // YUP they indeed are different!
 }
